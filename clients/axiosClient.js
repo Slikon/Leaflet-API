@@ -17,7 +17,8 @@ async function makeAxiosRequest (body) {
   const payload = {
     coordinates: body.coordinates,
     geometry_simplify: body.fragileCargo,
-    maximum_speed: body.maxSpeed
+    maximum_speed: body.maxSpeed,
+    preference: carType === "hgv" ? "shortest" : "fastest"
   }
 
   return httpOrsApi.post(url, payload).catch(err => {
