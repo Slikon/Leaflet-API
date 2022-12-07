@@ -14,11 +14,20 @@ async function makeAxiosRequest (body) {
   const carType = body.carType === 'heavy' ? "hgv" : "car";
   let url = `https://api.openrouteservice.org/v2/directions/driving-${carType}/geojson`
 
+  let preference
+  if(body.fragileCargo) {
+    preference = "recommended"
+  } else if (carType === "hgv") {
+    preference = "shortest"
+  } else {
+    preference = "fastest"
+  }
+
   const payload = {
     coordinates: body.coordinates,
     geometry_simplify: body.fragileCargo,
     maximum_speed: body.maxSpeed,
-    preference: carType === "hgv" ? "shortest" : "fastest"
+    preference: preference
   }
 
   return httpOrsApi.post(url, payload).catch(err => {
